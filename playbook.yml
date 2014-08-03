@@ -1,0 +1,41 @@
+---
+
+- hosts: webservers
+  vars:
+    http_port: 80
+    http_webroot: /var/www
+    http_url: example.com
+  remote_user: vagrant
+  sudo: yes
+  tasks:
+  - name: Atualiza todos os pacotes instalados
+    apt: upgrade=safe update_cache=yes cache_valid_time=86400
+
+  - name: Garante que Nginx está instalado
+    apt: pkg=nginx state=present
+
+  - name: Garante que Nginx está sendo executado agora e após o boot
+    service: name=nginx state=running enabled=yes
+
+  - name: Desabilita website padrao do Nginx
+    file: path=/etc/nginx/sites-enabled/default state=absent
+
+  - name: Cria diretorio para website
+    file: path=/var/www state=directory
+
+  - name: Adiciona arquivo de configuracao
+    template: src=example.com.j2 dest=/etc/nginx/sites-available/example.com
+    notify: Recarrega configuracoes do Nginx
+
+  - name: Habilita website
+    file: src=/etc/nginx/sites-available/example.com 
+          dest=/etc/nginx/sites-enabled/example.com
+          state=link
+    notify: Recarrega configuracoes do Nginx
+
+  - name: Adiciona index.html ao diretorio do website
+    copy: src=index.html dest=/var/www/index.html
+
+  handlers:
+  - name: Recarrega configuracoes do Nginx
+    service: name=nginx state=reloaded
