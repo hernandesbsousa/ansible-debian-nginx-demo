@@ -1,0 +1,14 @@
+# {{ ansible_managed }}
+
+server {
+	listen   {{ http_port }};
+
+	root {{ http_webroot }};
+	index index.html index.htm;
+
+	server_name {{ http_url }};
+
+	location / {
+		try_files $uri $uri/ /index.html;
+	}
+}
