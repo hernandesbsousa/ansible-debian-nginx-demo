@@ -8,6 +8,7 @@ Vagrant.configure(2) do |config|
   config.vm.provision "ansible" do |ansible|
     ansible.groups = { "webservers" => ["default"] }
     ansible.playbook = "./playbook.yml"
+    ansible.ask_sudo_pass = true
   end
 
 end

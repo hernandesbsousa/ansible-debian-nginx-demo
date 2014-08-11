@@ -8,8 +8,8 @@
   remote_user: vagrant
   sudo: yes
   tasks:
-  - name: Atualiza todos os pacotes instalados
-    apt: upgrade=safe update_cache=yes cache_valid_time=86400
+  - name: Atualiza cache do APT
+    apt: update_cache=yes cache_valid_time=86400
 
   - name: Garante que Nginx está instalado
     apt: pkg=nginx state=present
@@ -21,7 +21,7 @@
     file: path=/etc/nginx/sites-enabled/default state=absent
 
   - name: Cria diretorio para website
-    file: path=/var/www state=directory
+    file: path={{ http_webroot }} state=directory
 
   - name: Adiciona arquivo de configuracao
     template: src=example.com.j2 dest=/etc/nginx/sites-available/example.com
@@ -34,7 +34,12 @@
     notify: Recarrega configuracoes do Nginx
 
   - name: Adiciona index.html ao diretorio do website
-    copy: src=index.html dest=/var/www/index.html
+    copy: src=index.html dest={{ http_webroot }}index.html
+
+  - name: Adiciona entrada no hosts local
+    local_action: lineinfile line="192.168.33.11 example.com"
+                  dest=/etc/hosts
+    remote_user: hernandes
 
   handlers:
   - name: Recarrega configuracoes do Nginx
