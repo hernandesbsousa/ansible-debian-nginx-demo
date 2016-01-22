@@ -1,4 +1,4 @@
-# Ansible Hello World - TDC 2014
+# Ansible Hello World
 
 Este é um exemplo simples de como automatizar a instalação de um servidor web Nginx utilizando o Ansible.
 
