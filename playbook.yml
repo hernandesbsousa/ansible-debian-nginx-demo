@@ -28,13 +28,13 @@
     notify: Recarrega configuracoes do Nginx
 
   - name: Habilita website
-    file: src=/etc/nginx/sites-available/example.com 
+    file: src=/etc/nginx/sites-available/example.com
           dest=/etc/nginx/sites-enabled/example.com
           state=link
     notify: Recarrega configuracoes do Nginx
 
   - name: Adiciona index.html ao diretorio do website
-    copy: src=index.html dest={{ http_webroot }}index.html
+    copy: src=index.html dest={{ http_webroot }}/index.html
 
   - name: Adiciona entrada no hosts local
     local_action: lineinfile line="192.168.33.11 example.com"
