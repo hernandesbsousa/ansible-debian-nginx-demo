@@ -1,5 +1,5 @@
 Vagrant.configure(2) do |config|
-  config.vm.box = "chef/debian-7.4"
+  config.vm.box = "debian/wheezy64"
 
   config.vm.hostname = "myserver"
 
